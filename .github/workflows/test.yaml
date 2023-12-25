@@ -1,0 +1,22 @@
+name: Run Tests
+
+on:
+  push:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+      - name: Install Psycopg3 binaries
+        run: pip install "psycopg[binary,pool]"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run docker compose
+        run: docker compose -f docker-compose.test.yml up -d
+      - name: Run tests
+        run: coverage run -m unittest discover src
