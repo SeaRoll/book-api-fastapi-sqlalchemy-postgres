@@ -6,7 +6,8 @@ A simple Crud API example on FastAPI, Pyscopg3 and SQLAlchemy
 
 - Create, Read, Update and Delete books
 - Simple migrator for database
-- Simple test for API
+- Simple test for API & Coverage
+- Type checking with MyPy
 
 ## Requirements
 
