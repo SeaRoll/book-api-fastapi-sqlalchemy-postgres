@@ -3,12 +3,9 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 
-import database
-import migrator
-import model
-import schema
+from src import database, migrator, model, schema
 
 log = logging.getLogger(__name__)
 
@@ -31,8 +28,8 @@ def get() -> schema.DataResponse[schema.BookSchema]:
             .where(model.Book.is_deleted == False)
             .all()
         )
-        books = [schema.BookSchema.from_model(book) for book in books]
-        return schema.DataResponse(data=books)
+        books_schema = [schema.BookSchema.from_model(book) for book in books]
+        return schema.DataResponse(data=books_schema)
 
 
 @app.post("/", status_code=201)
@@ -50,6 +47,8 @@ def put(id: str, editBook: schema.EditBookSchema) -> schema.SuccessResponse:
     with database.SessionLocal() as session:
         with session.begin():
             book = session.get(model.Book, id)
+            if book is None:
+                raise HTTPException(status_code=400, detail="Book not found")
             book.title = editBook.title
             book.description = editBook.description
             session.merge(book)
@@ -62,6 +61,8 @@ def delete(id: str) -> schema.SuccessResponse:
     with database.SessionLocal() as session:
         with session.begin():
             book = session.get(model.Book, id)
+            if book is None or book.is_deleted:
+                raise HTTPException(status_code=400, detail="Book not found")
             book.is_deleted = True
             session.merge(book)
             session.commit()

@@ -4,10 +4,8 @@ from pathlib import Path
 from fastapi.testclient import TestClient
 from sqlalchemy import text
 
-import database
-import migrator
-import schema
-from main import app
+from src import database, migrator, schema
+from src.main import app
 
 
 class AppTest(unittest.TestCase):

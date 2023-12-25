@@ -47,6 +47,6 @@ DATABASE_URL=postgresql+psycopg://postgres:mysecretpassword@localhost:5432/postg
 
 ```sh
 docker compose -f docker-compose.test.yml up -d
-python -m unittest discover src
+coverage run -m unittest discover src
 docker compose -f docker-compose.test.yml down
 ```

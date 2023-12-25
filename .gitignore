@@ -2,3 +2,6 @@
 .env
 .env.production
 __pycache__/
+.mypy_cache/
+.coverage
+coverage.*

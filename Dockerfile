@@ -8,4 +8,4 @@ COPY ./.env.production ./.env
 COPY ./src ./src
 COPY ./migrations ./migrations
 
-CMD ["python", "./src/main.py"]
+CMD ["python", "-m", "src.main"]

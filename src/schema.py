@@ -2,7 +2,7 @@ from typing import Generic, TypeVar
 
 from pydantic import BaseModel
 
-import model
+from src import model
 
 T = TypeVar("T")
 
