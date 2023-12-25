@@ -18,5 +18,9 @@ jobs:
         run: pip install -r requirements.txt
       - name: Run docker compose
         run: docker compose -f docker-compose.test.yml up -d
+      - name: Create .env file
+        run: |
+          touch .env
+          echo "DATABASE_URL=postgresql+psycopg://postgres:mysecretpassword@localhost:5432/postgres" >> .env
       - name: Run tests
         run: coverage run -m unittest discover src
