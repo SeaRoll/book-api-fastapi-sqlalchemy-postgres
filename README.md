@@ -32,6 +32,8 @@ pip install -r requirements.txt
 ## Run Fully Locally
 
 ```sh
+#1. Create a `.env.production` file
+#2. Run the following command:
 docker compose up
 ```
 
