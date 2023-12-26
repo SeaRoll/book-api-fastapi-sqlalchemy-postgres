@@ -4,14 +4,17 @@ from pathlib import Path
 from fastapi.testclient import TestClient
 from sqlalchemy import text
 
-from api import database, migrator, schema
+from api import config, database, migrator, schema
 from api.app import app
 
 
 class AppTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        migrator.run_migration(Path("./migrations"), database.SessionLocal, 1)
+        migrator.run_migration(
+            Path(str(config.cfg.get("MIGRATION_PATH"))),
+            database.SessionLocal,
+        )
 
     def setUp(self) -> None:
         self.client = TestClient(app)

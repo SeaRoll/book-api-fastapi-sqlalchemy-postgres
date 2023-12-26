@@ -6,14 +6,18 @@ from typing import Any
 import uvicorn
 from fastapi import FastAPI, HTTPException
 
-from api import database, migrator, model, schema
+from api import config, database, migrator, model, schema
 
 log = logging.getLogger(__name__)
 
 
 @asynccontextmanager
 async def lifespan(_: FastAPI) -> Any:
-    migrator.run_migration(Path("./migrations"), database.SessionLocal, 1)
+    migrator.run_migration(
+        Path(str(config.cfg.get("MIGRATION_PATH"))),
+        database.SessionLocal,
+        int(config.cfg.get("MIGRATION_VERSION")),
+    )
     yield
 
 

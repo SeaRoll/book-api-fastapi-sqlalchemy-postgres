@@ -30,6 +30,8 @@ jobs:
         run: |
           touch .env
           echo "DATABASE_URL=postgresql+psycopg://postgres:mysecretpassword@localhost:5432/postgres" >> .env
+          echo "MIGRATION_PATH=./migrations" >> .env
+          echo "MIGRATION_VERSION=1" >> .env
       - name: Run tests
         run: coverage run -m unittest discover src
       - name: Generate coverage report
