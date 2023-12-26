@@ -19,6 +19,8 @@ A simple Crud API example on FastAPI, Pyscopg3 and SQLAlchemy
 ```sh
 # .env
 DATABASE_URL=...
+MIGRATION_PATH=./migrations
+MIGRATION_VERSION=1
 ```
 
 ## Installation
@@ -69,6 +71,8 @@ docker compose up
 ```sh
 # .env
 DATABASE_URL=postgresql+psycopg://postgres:mysecretpassword@localhost:5432/postgres
+MIGRATION_PATH=./migrations
+MIGRATION_VERSION=1
 ```
 
 #### Run tests
