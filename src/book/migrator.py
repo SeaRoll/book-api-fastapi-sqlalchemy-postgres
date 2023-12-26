@@ -11,7 +11,7 @@ log = logging.getLogger(__name__)
 def run_migration(
     path: Path,
     sessionmaker: sessionmaker[Session],
-    start_version=1,
+    start_version: int = 1,
 ) -> None:
     with sessionmaker() as session:
         with session.begin():

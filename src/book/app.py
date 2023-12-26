@@ -1,18 +1,18 @@
 import logging
 from contextlib import asynccontextmanager
 from pathlib import Path
+from typing import Any
 
 import uvicorn
 from fastapi import FastAPI, HTTPException
 
-from src import database, migrator, model, schema
+from book import database, migrator, model, schema
 
 log = logging.getLogger(__name__)
 
 
 @asynccontextmanager
-async def lifespan(_: FastAPI):
-    print("Starting up")
+async def lifespan(_: FastAPI) -> Any:
     migrator.run_migration(Path("./migrations"), database.SessionLocal, 1)
     yield
 
@@ -69,6 +69,6 @@ def delete(id: str) -> schema.SuccessResponse:
     return schema.SuccessResponse(success=True)
 
 
-if __name__ == "__main__":
+def run() -> None:
     logging.basicConfig(level=logging.DEBUG)
     uvicorn.run(app, host="0.0.0.0", port=8000, log_level="debug")

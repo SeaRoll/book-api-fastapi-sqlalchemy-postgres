@@ -8,4 +8,4 @@ COPY ./migrations ./migrations
 RUN pip install "psycopg[binary,pool]"
 RUN pip install -e .
 
-CMD ["python", "-m", "src.main"]
+CMD ["start"]

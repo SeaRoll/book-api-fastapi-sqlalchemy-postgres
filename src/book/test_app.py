@@ -4,23 +4,23 @@ from pathlib import Path
 from fastapi.testclient import TestClient
 from sqlalchemy import text
 
-from src import database, migrator, schema
-from src.main import app
+from book import database, migrator, schema
+from book.app import app
 
 
 class AppTest(unittest.TestCase):
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(cls) -> None:
         migrator.run_migration(Path("./migrations"), database.SessionLocal, 1)
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.client = TestClient(app)
         with database.SessionLocal() as session:
             with session.begin():
                 session.execute(text("DELETE FROM books"))
                 session.commit()
 
-    def create_book(self, title: str, description: str):
+    def create_book(self, title: str, description: str) -> None:
         self.client.post(
             "/",
             json={
@@ -29,7 +29,7 @@ class AppTest(unittest.TestCase):
             },
         )
 
-    def test_get(self):
+    def test_get(self) -> None:
         self.create_book("foo", "bar")
         response = self.client.get("/")
         self.assertEqual(response.status_code, 200)
@@ -40,7 +40,7 @@ class AppTest(unittest.TestCase):
         self.assertEqual(books.data[0].title, "foo")
         self.assertEqual(books.data[0].description, "bar")
 
-    def test_post(self):
+    def test_post(self) -> None:
         response = self.client.post(
             "/",
             json={

@@ -2,7 +2,7 @@ import uuid
 
 from sqlalchemy.orm import Mapped, mapped_column
 
-from src.database import Base
+from book.database import Base
 
 
 class Book(Base):
