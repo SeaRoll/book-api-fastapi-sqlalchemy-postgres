@@ -23,11 +23,7 @@ app = FastAPI(lifespan=lifespan)
 @app.get("/")
 def get() -> schema.DataResponse[schema.BookSchema]:
     with database.SessionLocal() as session:
-        books = (
-            session.query(model.Book)
-            .where(model.Book.is_deleted == False)
-            .all()
-        )
+        books = session.query(model.Book).where(model.Book.is_deleted == False).all()
         books_schema = [schema.BookSchema.from_model(book) for book in books]
         return schema.DataResponse(data=books_schema)
 

@@ -34,9 +34,7 @@ class AppTest(unittest.TestCase):
         created_book = self.create_book("foo", "bar")
         response = self.client.get("/")
         self.assertEqual(response.status_code, 200)
-        books = schema.DataResponse[schema.BookSchema].model_validate(
-            response.json()
-        )
+        books = schema.DataResponse[schema.BookSchema].model_validate(response.json())
         self.assertEqual(len(books.data), 1)
         self.assertEqual(books.data[0].id, created_book.id)
         self.assertEqual(books.data[0].title, created_book.title)

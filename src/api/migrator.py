@@ -22,9 +22,7 @@ def run_migration(
                 if file.is_file() and file.suffix == ".sql"
             ]
             # 2 Split the file by __ delimiter
-            sorted_files = sorted(
-                files, key=lambda file: int(file.stem.split("__")[0])
-            )
+            sorted_files = sorted(files, key=lambda file: int(file.stem.split("__")[0]))
             for file in sorted_files:
                 version = int(file.stem.split("__")[0])
                 if version < start_version:
