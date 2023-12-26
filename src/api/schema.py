@@ -1,7 +1,8 @@
 from typing import Generic, TypeVar
 
-from api import model
 from pydantic import BaseModel
+
+from api import model
 
 T = TypeVar("T")
 
@@ -103,3 +104,41 @@ class SuccessResponse(BaseModel):
     """
 
     success: bool
+
+
+class MetadataResponse(BaseModel):
+    """
+    Metadata response for pagination
+
+    Attributes
+    ----------
+    page : int
+        The current page
+    per_page : int
+        The number of items per page
+    total_pages : int
+        The total number of pages
+    total : int
+        The total number of items
+    """
+
+    page: int
+    per_page: int
+    total_pages: int
+    total: int
+
+
+class PageResponse(BaseModel, Generic[T]):
+    """
+    Generic list data response with metadata
+
+    Attributes
+    ----------
+    data : list[T]
+        The data list
+    metadata : MetadataResponse
+        The metadata
+    """
+
+    data: list[T]
+    metadata: MetadataResponse

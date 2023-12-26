@@ -4,8 +4,9 @@ from pathlib import Path
 from typing import Any
 
 import uvicorn
-from api import config, database, migrator, model, schema
 from fastapi import FastAPI, HTTPException
+
+from api import config, database, migrator, model, schema
 
 log = logging.getLogger(__name__)
 
@@ -54,13 +55,13 @@ def get() -> schema.DataResponse[schema.BookSchema]:
 
 
 @app.post("/", status_code=201)
-def post(newBook: schema.NewBookSchema) -> schema.BookSchema:
+def post(new_book: schema.NewBookSchema) -> schema.BookSchema:
     """
     Creates a new book
 
     Parameters
     ----------
-    newBook : schema.NewBookSchema
+    new_book : schema.NewBookSchema
         The new book data
 
     Returns
@@ -71,14 +72,14 @@ def post(newBook: schema.NewBookSchema) -> schema.BookSchema:
 
     with database.SessionLocal() as session:
         with session.begin():
-            book = model.Book.new(newBook.title, newBook.description)
+            book = model.Book.new(new_book.title, new_book.description)
             session.add(book)
             session.commit()
             return schema.BookSchema.from_model(book)
 
 
 @app.put("/{id}")
-def put(id: str, editBook: schema.EditBookSchema) -> schema.BookSchema:
+def put(id: str, edit_book: schema.EditBookSchema) -> schema.BookSchema:
     """
     Updates a book with the given id
 
@@ -86,7 +87,7 @@ def put(id: str, editBook: schema.EditBookSchema) -> schema.BookSchema:
     ----------
     id : str
         The book id
-    editBook : schema.EditBookSchema
+    edit_book schema.EditBookSchema
         The book data
 
     Raises
@@ -104,8 +105,8 @@ def put(id: str, editBook: schema.EditBookSchema) -> schema.BookSchema:
             book = session.get(model.Book, id)
             if book is None:
                 raise HTTPException(status_code=404, detail="Book not found")
-            book.title = editBook.title
-            book.description = editBook.description
+            book.title = edit_book.title
+            book.description = edit_book.description
             session.merge(book)
             session.commit()
             return schema.BookSchema.from_model(book)
