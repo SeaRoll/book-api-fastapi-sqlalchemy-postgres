@@ -16,6 +16,7 @@ dependencies = [
 dev = [
   "mypy==1.8.0",
   "httpx==0.26.0",
+  "coverage==7.3.4",
 ]
 
 [project.urls]
