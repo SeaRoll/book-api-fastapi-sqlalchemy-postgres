@@ -31,6 +31,29 @@ pip install -e .
 pip install -e '.[dev]'
 ```
 
+#### Usage with VSCode
+
+For VSCode, extensions `Python`, `Mypy Type Checker`, and `Ruff` are recommended.
+
+Then in the `settings.json`, put these configurations:
+
+```json
+{
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.codeActionsOnSave": {
+      "source.fixAll": true,
+      "source.organizeImports": true
+    },
+    "editor.formatOnSave": true
+  },
+  "mypy-type-checker.path": ["./.venv/bin/mypy"],
+  "mypy-type-checker.interpreter": ["./.venv/bin/python"],
+  "mypy-type-checker.args": ["--config-file", "./pyproject.toml"],
+  "ruff.format.args": ["--config=./pyproject.toml"]
+}
+```
+
 ## Run Fully Locally
 
 ```sh
