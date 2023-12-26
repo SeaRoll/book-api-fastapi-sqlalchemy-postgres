@@ -80,7 +80,7 @@ class AppTest(unittest.TestCase):
                 "description": "bar2",
             },
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 404)
 
     def test_delete(self) -> None:
         created_book = self.create_book("foo", "bar")
@@ -89,4 +89,4 @@ class AppTest(unittest.TestCase):
 
     def test_delete_400(self) -> None:
         response = self.client.delete("/random-id")
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 404)

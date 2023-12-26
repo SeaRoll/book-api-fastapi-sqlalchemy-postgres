@@ -4,9 +4,8 @@ from pathlib import Path
 from typing import Any
 
 import uvicorn
-from fastapi import FastAPI, HTTPException
-
 from api import config, database, migrator, model, schema
+from fastapi import FastAPI, HTTPException
 
 log = logging.getLogger(__name__)
 
@@ -48,7 +47,7 @@ def put(id: str, editBook: schema.EditBookSchema) -> schema.BookSchema:
         with session.begin():
             book = session.get(model.Book, id)
             if book is None:
-                raise HTTPException(status_code=400, detail="Book not found")
+                raise HTTPException(status_code=404, detail="Book not found")
             book.title = editBook.title
             book.description = editBook.description
             session.merge(book)
@@ -62,7 +61,7 @@ def delete(id: str) -> schema.SuccessResponse:
         with session.begin():
             book = session.get(model.Book, id)
             if book is None or book.is_deleted:
-                raise HTTPException(status_code=400, detail="Book not found")
+                raise HTTPException(status_code=404, detail="Book not found")
             book.is_deleted = True
             session.merge(book)
             session.commit()
