@@ -1,5 +1,6 @@
 .venv
 .env
+*.egg-info
 .env.production
 __pycache__/
 .mypy_cache/

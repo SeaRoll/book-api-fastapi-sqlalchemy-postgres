@@ -25,8 +25,9 @@ DATABASE_URL=...
 ```sh
 python -m venv .venv
 source .venv/bin/activate
-pip install "psycopg[binary,pool]" # For psycopg3
-pip install -r requirements.txt
+pip install 'psycopg[binary,pool]' # For psycopg3
+pip install -e .
+pip install -e '.[dev]'
 ```
 
 ## Run Fully Locally
