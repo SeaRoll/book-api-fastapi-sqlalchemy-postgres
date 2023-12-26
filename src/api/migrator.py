@@ -13,6 +13,21 @@ def run_migration(
     sessionmaker: sessionmaker[Session],
     start_version: int = 1,
 ) -> None:
+    """
+    Runs the migration scripts in the given path.
+
+    The SQL files should be named as <version>__<name>.sql
+
+    Parameters
+    ----------
+    path : Path
+        The path to the migration scripts
+    sessionmaker : sessionmaker[Session]
+        The sessionmaker
+    start_version : int, optional
+        The migration version to start from, by default 1
+    """
+
     with sessionmaker() as session:
         with session.begin():
             # 1 Get all file names in the migrations folder

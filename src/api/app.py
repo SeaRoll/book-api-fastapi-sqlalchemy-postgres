@@ -12,6 +12,19 @@ log = logging.getLogger(__name__)
 
 @asynccontextmanager
 async def lifespan(_: FastAPI) -> Any:
+    """
+    A lifespan event handler to run the migration before the app starts
+
+    Parameters
+    ----------
+    _ : FastAPI
+        The FastAPI instance
+
+    Yields
+    ------
+    Any
+        The yielded value
+    """
     migrator.run_migration(
         Path(str(config.cfg.get("MIGRATION_PATH"))),
         database.SessionLocal,
@@ -25,6 +38,15 @@ app = FastAPI(lifespan=lifespan)
 
 @app.get("/")
 def get() -> schema.DataResponse[schema.BookSchema]:
+    """
+    Returns the list of books
+
+    Returns
+    -------
+    schema.DataResponse[schema.BookSchema]
+        The list of books
+    """
+
     with database.SessionLocal() as session:
         books = session.query(model.Book).where(model.Book.is_deleted == False).all()
         books_schema = [schema.BookSchema.from_model(book) for book in books]
@@ -33,6 +55,20 @@ def get() -> schema.DataResponse[schema.BookSchema]:
 
 @app.post("/", status_code=201)
 def post(newBook: schema.NewBookSchema) -> schema.BookSchema:
+    """
+    Creates a new book
+
+    Parameters
+    ----------
+    newBook : schema.NewBookSchema
+        The new book data
+
+    Returns
+    -------
+    schema.BookSchema
+        The created book
+    """
+
     with database.SessionLocal() as session:
         with session.begin():
             book = model.Book.new(newBook.title, newBook.description)
@@ -43,6 +79,26 @@ def post(newBook: schema.NewBookSchema) -> schema.BookSchema:
 
 @app.put("/{id}")
 def put(id: str, editBook: schema.EditBookSchema) -> schema.BookSchema:
+    """
+    Updates a book with the given id
+
+    Parameters
+    ----------
+    id : str
+        The book id
+    editBook : schema.EditBookSchema
+        The book data
+
+    Raises
+    ------
+    HTTPException
+        If the book is not found
+
+    Returns
+    -------
+    schema.BookSchema
+        The updated book
+    """
     with database.SessionLocal() as session:
         with session.begin():
             book = session.get(model.Book, id)
@@ -57,6 +113,24 @@ def put(id: str, editBook: schema.EditBookSchema) -> schema.BookSchema:
 
 @app.delete("/{id}")
 def delete(id: str) -> schema.SuccessResponse:
+    """
+    Deletes a book with the given id
+
+    Parameters
+    ----------
+    id : str
+        The book id
+
+    Raises
+    ------
+    HTTPException
+        If the book is not found
+
+    Returns
+    -------
+    schema.SuccessResponse
+        The success response
+    """
     with database.SessionLocal() as session:
         with session.begin():
             book = session.get(model.Book, id)
