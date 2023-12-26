@@ -2,9 +2,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-from book import config
+from api import config
 
 engine = create_engine(url=str(config.cfg.get("DATABASE_URL", "")))
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+SessionLocal = sessionmaker(bind=engine, expire_on_commit=False)
 
 Base = declarative_base()

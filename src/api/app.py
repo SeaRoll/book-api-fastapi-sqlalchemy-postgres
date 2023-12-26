@@ -6,7 +6,7 @@ from typing import Any
 import uvicorn
 from fastapi import FastAPI, HTTPException
 
-from book import database, migrator, model, schema
+from api import database, migrator, model, schema
 
 log = logging.getLogger(__name__)
 
@@ -33,17 +33,17 @@ def get() -> schema.DataResponse[schema.BookSchema]:
 
 
 @app.post("/", status_code=201)
-def post(newBook: schema.NewBookSchema) -> schema.SuccessResponse:
+def post(newBook: schema.NewBookSchema) -> schema.BookSchema:
     with database.SessionLocal() as session:
         with session.begin():
             book = model.Book.new(newBook.title, newBook.description)
             session.add(book)
             session.commit()
-    return schema.SuccessResponse(success=True)
+            return schema.BookSchema.from_model(book)
 
 
 @app.put("/{id}")
-def put(id: str, editBook: schema.EditBookSchema) -> schema.SuccessResponse:
+def put(id: str, editBook: schema.EditBookSchema) -> schema.BookSchema:
     with database.SessionLocal() as session:
         with session.begin():
             book = session.get(model.Book, id)
@@ -53,7 +53,7 @@ def put(id: str, editBook: schema.EditBookSchema) -> schema.SuccessResponse:
             book.description = editBook.description
             session.merge(book)
             session.commit()
-    return schema.SuccessResponse(success=True)
+            return schema.BookSchema.from_model(book)
 
 
 @app.delete("/{id}")

@@ -20,7 +20,7 @@ dev = [
 ]
 
 [project.scripts]
-start = "book.app:run"
+start = "api.app:run"
 
 [project.urls]
 Homepage = "https://example.com"
