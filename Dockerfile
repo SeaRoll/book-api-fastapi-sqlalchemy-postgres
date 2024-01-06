@@ -1,7 +1,7 @@
 FROM python:3.11-alpine
 
 COPY ./pyproject.toml ./pyproject.toml
-COPY ./.env.production ./.env
+COPY ./.env ./.env
 COPY ./src ./src
 COPY ./migrations ./migrations
 
